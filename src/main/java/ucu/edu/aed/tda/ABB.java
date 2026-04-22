@@ -46,16 +46,25 @@ public class ABB<T> implements TDAArbolBinario<T>{
 
     @Override
     public void inOrder(Consumer<T> consumidor) {
+        if (raiz != null){
+            this.raiz.inOrder(elemento -> consumidor.accept(elemento.getDato()));
+        }
 
     }
 
     @Override
     public void preOrder(Consumer<T> consumidor) {
+        if (raiz != null){
+            this.raiz.preOrder(elemento -> consumidor.accept(elemento.getDato()));
+        }
 
     }
 
     @Override
     public void postOrder(Consumer<T> consumidor) {
+        if(raiz != null){
+            this.raiz.postOrder(elemento -> consumidor.accept(elemento.getDato()));
+        }
 
     }
 
@@ -76,7 +85,10 @@ public class ABB<T> implements TDAArbolBinario<T>{
 
     @Override
     public int cantidadHojas() {
-        return 0;
+        if (raiz == null){
+            return 0;
+        }
+        return raiz.cantidadHojas();
     }
 
     @Override

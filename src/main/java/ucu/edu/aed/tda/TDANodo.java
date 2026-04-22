@@ -74,10 +74,10 @@ public class TDANodo<T> implements TDAElemento<T>{
     public boolean insertar(Comparable<T> nuevoDato) {
             if (nuevoDato.compareTo(this.dato) > 0) {
                 if (hijoDer == null){
-                    hijoDer = new TDANodo(nuevoDato); //bug del profe, lo va a arreglar.
+                    hijoDer = new TDANodo(nuevoDato);
                     return true;
                 }else{
-                    hijoDer.insertar(nuevoDato);
+                    return hijoDer.insertar(nuevoDato);
 
                 }
             }else if (nuevoDato.compareTo(this.dato) <0){
@@ -85,7 +85,7 @@ public class TDANodo<T> implements TDAElemento<T>{
                     hijoIzq = new TDANodo(nuevoDato);
                     return true;
                 }else{
-                    hijoIzq.insertar(nuevoDato);
+                    return hijoIzq.insertar(nuevoDato);
                 }
             }
             return false;
@@ -122,17 +122,60 @@ public class TDANodo<T> implements TDAElemento<T>{
 
     @Override
     public int cantidadHojas() {
-        return 0;
+        //devuelve 1 si el primero es hoja
+        if(this.esHoja() == true){
+            return 1;
+        }
+
+        //si el primero no es hoja, todavia no tenemos hojas.
+        int hojasSubArbol = 0;
+
+        if (hijoIzq != null){
+            hojasSubArbol += hijoIzq.cantidadHojas();
+        }
+        if(hijoDer != null){
+            hojasSubArbol += hijoDer.cantidadHojas();
+        }
+        return hojasSubArbol;
     }
 
     @Override
     public int cantidadNodosInternos() {
-        return 0;
+        //devuevle 0 si es hoja, ya que si es hoja no tenemos ningun nodo interno
+        if(this.esHoja()){
+            return 0;
+        }
+
+        //Si el primero no es hoja, ya tenemos un nodo interno.
+        int nodosSubArbol = 1;
+
+        if(hijoDer != null){
+            nodosSubArbol += hijoDer.cantidadNodosInternos();
+        }
+        if(hijoIzq != null){
+            nodosSubArbol += hijoIzq.cantidadNodosInternos();
+        }
+        return nodosSubArbol;
     }
 
     @Override
     public int cantidadNodos() {
-        return 0;
+        //devuelve 1 si es hoja, ya que si es hoja tenemos solo un nodo
+        if(this.esHoja()){
+            return 1;
+        }
+
+        //si no es hoja, tenemos un nodo tambíen.
+        int nodosTotales = 1;
+
+        if(hijoDer != null){
+            nodosTotales += hijoDer.cantidadNodos();
+        }
+
+        if(hijoIzq != null){
+            nodosTotales += hijoIzq.cantidadNodos();
+        }
+        return nodosTotales;
     }
 
     @Override
