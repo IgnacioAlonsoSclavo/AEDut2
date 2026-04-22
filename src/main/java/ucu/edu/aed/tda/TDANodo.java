@@ -92,18 +92,24 @@ public class TDANodo<T> implements TDAElemento<T>{
     }
 
     @Override
-    public void inOrder(Consumer<TDAElemento<T>> consumidor) {
-
+    public void preOrder(Consumer<TDAElemento<T>> consumidor) {
+        consumidor.accept(this);
+        if(this.hijoIzq !=null) this.hijoIzq.preOrder(consumidor);
+        if(this.hijoDer != null) this.hijoDer.preOrder(consumidor);
     }
 
     @Override
-    public void preOrder(Consumer<TDAElemento<T>> consumidor) {
-
+    public void inOrder(Consumer<TDAElemento<T>> consumidor) {
+        if(this.hijoIzq != null) this.hijoIzq.inOrder(consumidor);
+        consumidor.accept(this);
+        if (this.hijoDer != null) this.hijoDer.inOrder(consumidor);
     }
 
     @Override
     public void postOrder(Consumer<TDAElemento<T>> consumidor) {
-
+        if(this.hijoIzq != null) this.hijoIzq.postOrder(consumidor);
+        if(this.hijoDer != null) this.hijoDer.postOrder(consumidor);
+        consumidor.accept(this);
     }
 
     @Override

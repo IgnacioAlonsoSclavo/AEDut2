@@ -24,7 +24,7 @@ public class ABB<T> implements TDAArbolBinario<T>{
 
     @Override
     public TDAElemento<T> obtenerRaiz() {
-        return null;
+        return raiz;
     }
 
     @Override
@@ -61,7 +61,12 @@ public class ABB<T> implements TDAArbolBinario<T>{
 
     @Override
     public boolean esVacio() {
-        return false;
+       if (raiz == null){
+           return true;
+       }
+       else{
+           return false;
+       }
     }
 
     @Override
