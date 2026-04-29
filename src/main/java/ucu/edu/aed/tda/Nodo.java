@@ -2,14 +2,14 @@ package ucu.edu.aed.tda;
 
 import java.util.function.Consumer;
 
-public class TDANodo<T> implements TDAElemento<T>{
+public class Nodo<T> implements TDAElemento<T>{
     private T dato;
     private TDAElemento<T> hijoIzq;
     private TDAElemento<T> hijoDer;
 
     public static int contador = 0;
 
-    public TDANodo (T dato){
+    public Nodo (T dato){
         this.hijoDer = null;
         this.hijoIzq = null;
         this.dato = dato;
@@ -48,6 +48,7 @@ public class TDANodo<T> implements TDAElemento<T>{
     @Override
     public TDAElemento<T> buscar(Comparable<T> criterioBusqueda) {
 
+
         int cmp = criterioBusqueda.compareTo(this.dato);
 
         if (cmp == 0) {
@@ -67,14 +68,53 @@ public class TDANodo<T> implements TDAElemento<T>{
 
     @Override
     public TDAElemento<T> eliminar(Comparable<T> criterioBusqueda) {
-        return null;
+        if (criterioBusqueda.compareTo(this.dato) < 0) {
+            if (hijoIzq != null) {
+                this.hijoIzq = this.hijoIzq.eliminar(criterioBusqueda);
+            }
+            return this;
+
+        } else if (criterioBusqueda.compareTo(this.dato) > 0) {
+            if (hijoDer != null) {
+                this.hijoDer = this.hijoDer.eliminar(criterioBusqueda);
+            }
+            return this;
+        } else {
+            return quitarNodo(this);
+        }
     }
+
+    public TDAElemento<T> quitarNodo(TDAElemento<T> nodo) {
+        if (this.hijoIzq == null) {
+            return this.hijoDer;
+        } else if (this.hijoDer == null) {
+            return this.hijoIzq;
+        } else {
+            TDAElemento<T> elHijo = this.hijoIzq;
+            TDAElemento<T> elPadre = this;
+
+            while (elHijo.getHijoDerecho() != null) {
+                elPadre = elHijo;
+                elHijo = elHijo.getHijoDerecho();
+            }
+
+            if (elPadre != this) {
+                elPadre.setHijoDerecho(elHijo.getHijoIzquierdo());
+                elHijo.setHijoIzquierdo(this.hijoIzq);
+            }
+
+            elHijo.setHijoDerecho(this.hijoDer);
+            return elHijo;
+        }
+    }
+
+
 
     @Override
     public boolean insertar(Comparable<T> nuevoDato) {
             if (nuevoDato.compareTo(this.dato) > 0) {
                 if (hijoDer == null){
-                    hijoDer = new TDANodo(nuevoDato);
+                    hijoDer = new Nodo(nuevoDato);
                     return true;
                 }else{
                     return hijoDer.insertar(nuevoDato);
@@ -82,7 +122,7 @@ public class TDANodo<T> implements TDAElemento<T>{
                 }
             }else if (nuevoDato.compareTo(this.dato) <0){
                 if(hijoIzq == null){
-                    hijoIzq = new TDANodo(nuevoDato);
+                    hijoIzq = new Nodo(nuevoDato);
                     return true;
                 }else{
                     return hijoIzq.insertar(nuevoDato);
@@ -165,7 +205,7 @@ public class TDANodo<T> implements TDAElemento<T>{
             return 1;
         }
 
-        //si no es hoja, tenemos un nodo tambíen.
+        //si no es hoja, tenemos un nodo tambíen.m
         int nodosTotales = 1;
 
         if(hijoDer != null){
@@ -180,11 +220,60 @@ public class TDANodo<T> implements TDAElemento<T>{
 
     @Override
     public int altura() {
-        return 0;
+        if (this.esHoja()) {
+            return 0;
+        }
+        int izq = (hijoIzq != null) ? hijoIzq.altura() : 0;
+        int der = (hijoDer != null) ? hijoDer.altura() : 0;
+
+        return 1 + Math.max(izq, der);
     }
 
+    /* Método "más legible" de altura.
+    public int altura() {
+        // Si es hoja, la altura es 0 (no hay niveles debajo)
+        if (this.esHoja()) {
+            return 0;
+        }
+
+        // Si no es hoja, ya tenemos al menos 1 nivel debajo
+        int alturaNodo = 0;
+
+        if (hijoIzq != null) {
+            alturaNodo = Math.max(alturaNodo, hijoIzq.altura());
+        }
+
+        if (hijoDer != null) {
+            alturaNodo = Math.max(alturaNodo, hijoDer.altura());
+        }
+
+        return 1 + alturaNodo;
+    }
+*/
     @Override
     public int obtenerNivel(Comparable<T> criterioBusqueda) {
-        return 0;
+        if (criterioBusqueda.compareTo(this.dato) == 0) {
+            return 1;
+        }
+        if (this.esHoja()) {
+            return -1;
+        }
+        if (criterioBusqueda.compareTo(this.dato) < 0) {
+            if (hijoIzq != null) {
+                int nivelHijo = hijoIzq.obtenerNivel(criterioBusqueda);
+                if (nivelHijo != -1) {
+                    return 1 + nivelHijo;
+                }
+            }
+        }
+        if (criterioBusqueda.compareTo(this.dato) > 0) {
+            if (hijoDer != null) {
+                int nivelHijo = hijoDer.obtenerNivel(criterioBusqueda);
+                if (nivelHijo != -1) {
+                    return 1 + nivelHijo;
+                }
+            }
+        }
+        return -1;
     }
 }

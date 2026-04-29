@@ -3,12 +3,12 @@ import java.util.function.Consumer;
 
 public class ABB<T> implements TDAArbolBinario<T>{
 
-    TDANodo<T> raiz;
+    Nodo<T> raiz;
 
     public ABB(){
         this.raiz = null;
     }
-    public ABB(TDANodo<T> raiz){
+    public ABB(Nodo<T> raiz){
         this.raiz = raiz;
     }
 
@@ -18,8 +18,15 @@ public class ABB<T> implements TDAArbolBinario<T>{
             return null;
         }
         else{
-            return raiz.buscar(predicate).getDato();
+            TDAElemento<T> nodoEncontrado = raiz.buscar(predicate);
+            if(nodoEncontrado != null){
+                return nodoEncontrado.getDato();
+            }
+            else {
+                return null;
+            }
         }
+
     }
 
     @Override
@@ -29,18 +36,20 @@ public class ABB<T> implements TDAArbolBinario<T>{
 
     @Override
     public boolean eliminar(Comparable<T> criterioBusqueda) {
-        return false;
+        if (raiz == null) return false;
+        if (this.buscar(criterioBusqueda) == null) return false;
+        this.raiz = (Nodo<T>) raiz.eliminar(criterioBusqueda);
+        return true;
     }
 
     @Override
     public boolean insertar(Comparable<T> dato) {
         if (this.raiz == null){
-            raiz = new TDANodo<T>((T) dato);
+            raiz = new Nodo<T>((T) dato);
             return true;
         }
         else{
-            raiz.insertar(dato);
-            return true;
+            return raiz.insertar(dato);
         }
     }
 
@@ -80,7 +89,10 @@ public class ABB<T> implements TDAArbolBinario<T>{
 
     @Override
     public int cantidadNodos() {
-        return 0;
+        if(raiz == null){
+            return 0;
+        }
+        return raiz.cantidadNodos();
     }
 
     @Override
@@ -93,6 +105,8 @@ public class ABB<T> implements TDAArbolBinario<T>{
 
     @Override
     public int cantidadNodosInternos() {
-        return 0;
+        if(raiz == null){
+        return 0;}
+        return raiz.cantidadNodosInternos();
     }
 }
