@@ -1,0 +1,21 @@
+Consultar los hechizos prohibidos:
+Se debe de recorrer todos los hechizos existentes en el grimorio, aquellos hechizos cullo id sea impar se consideran prohibidos.
+Los hechizo prohibidos se insertan en una lista de prohibidos para luego poder retornar todos los hechizos prohibidos.
+
+Precondiciones:
+-el grimorio debe de contar con almenos 1 hechizo
+
+Postcondiciones:
+-se deben de agregar a la lista de hechizos prohibidos todos los hechizos con id impar.
+-se debe retornar la lista de hechizos prohibidos.
+
+HechizosProhibidos
+
+Iniciar
+si !grimorio.esvacio() entonces
+    por hechizo en grimorio
+        si hechizo.getID mod 2 == 0 entonces
+            hechizosProhibidos.añadir(hechizo)
+
+sino return null;
+

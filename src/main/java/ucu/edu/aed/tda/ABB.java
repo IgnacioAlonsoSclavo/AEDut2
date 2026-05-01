@@ -20,6 +20,7 @@ public class ABB<T> implements TDAArbolBinario<T>{
         else{
             TDAElemento<T> nodoEncontrado = raiz.buscar(predicate);
             if(nodoEncontrado != null){
+
                 return nodoEncontrado.getDato();
             }
             else {
